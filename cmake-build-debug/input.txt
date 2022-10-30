@@ -1,0 +1,5 @@
+name1 123452 factory1 100 Russia
+name2 123455 factory2 1050 Czech
+name3 123462 factory3 2300 China
+name4 123471 factory4 2100 China
+name5 123490 factory5 2340 Russia

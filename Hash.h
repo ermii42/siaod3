@@ -106,7 +106,7 @@ int insertInHeshTable(int code, string name, string factory, int price, string c
         return 0;
     }
     else
-        return 1;
+        return -1;
 }
 
 // вывод хеш-таблицы

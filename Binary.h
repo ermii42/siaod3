@@ -11,7 +11,7 @@ struct product{
     int code;
     char name[20];
     char factory[20];
-    char price[20];
+    int price;
     char country[20];
 };
 
@@ -82,18 +82,13 @@ int out_bin_file(string filename)
     return 0;
 }
 
-int FindRecord(string filename, int n){
-    product x;
+int FindRecord(string filename, int n, product& x){
+    //product x;
     ifstream file(filename, ios::out | ios::in | ios::binary);
     if(!file) return -1;
     file.seekg(sizeof(product)*(n-1), ios::beg);
     if(file.bad()) return -1;
     file.read((char *)&x, sizeof(product));
-    cout << x.name<<'\t';
-    cout << x.code<<'\t';
-    cout << x.factory<<'\t';
-    cout << x.price<<'\t';
-    cout << x.country;
     file.close();
     return 0;
 }

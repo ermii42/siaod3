@@ -3,4 +3,4 @@ project(3)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(3 main.cpp Hash.h Binary.h Bin_Hash.h TestHash.h)
+add_executable(3 main.cpp Hash.h Binary.h Bin_Hash.h TestHash.h TestBinary.h)

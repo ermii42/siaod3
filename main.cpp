@@ -1,10 +1,11 @@
 #include "Hash.h"
-#include "TestHash.h"
 #include "Binary.h"
+#include "TestHash.h"
+#include "TestBinary.h"
 
 int main()
 {
     testHash();
-
+    testBinary();
 }
 
