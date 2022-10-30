@@ -19,7 +19,7 @@ void testBinary(){
     int code;
     int choice;
     int number;
-    while(true){
+    do{
         cout<<"1) преобразование тестовых данных из текстового файла в двоичный файл"<<endl;
         cout<<"2) сохранение данных двоичного файла в текстовом"<<endl;
         cout<<"3) вывод всех записей двоичного файла"<<endl;
@@ -93,11 +93,11 @@ void testBinary(){
                 if(code==-1) cout<<"Файл не открылся";
                 break;
             default:
-                delete record;
-                exit(0);
                 break;
         }
+
         cout<<endl;
-    }
+    }while (choice!=-1);
+    delete record;
 }
 #endif //INC_3_TESTBINARY_H
