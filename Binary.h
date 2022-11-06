@@ -37,7 +37,7 @@ int stringBinToText(string fileName, string newfileName) /** из текстов
     return 0;
 }
 
-int stringTextToBin(string fileName, string newfileName) /** из двоичного в текстовый */
+int stringTextToBin(string fileName, string newfileName) // из двоичного в текстовый
 {
     ifstream input(fileName, std::ios::binary | std::ios::in);
     ofstream output(newfileName);

@@ -16,8 +16,7 @@ struct typeitem {
     string factory="-"; // завод изготовитель
     int price = 0; // цена
     string country = "-"; // страна (название)
-
-    //string adress="-"; //адрес по постановке задачи
+    int record_number; // порядковый номер записи
 
     bool openORclose=true;     //свободна ли ячейка
     bool deletedORnot=false;    //не удалялась ли ячейка
@@ -65,7 +64,7 @@ int hesh(int code, int L) {
 }
 
 //вставка с рехешированием
-int insertInHeshTable(int code, string name, string factory, int price, string country, HeshTable& t) {
+int insertInHeshTable(int code, string name, string factory, int price, string country, int record_number, HeshTable& t) {
 
     // рехеширование
     if(float(t.insertedcount) / t.L >= 0.75){ // коэффициент нагрузки
@@ -79,12 +78,12 @@ int insertInHeshTable(int code, string name, string factory, int price, string c
                 // добавляю только непустые неудаленные элементы
                 if(t.T[i][j].openORclose == false && t.T[i][j].deletedORnot==false){
                     insertInHeshTable(t.T[i][j].code, t.T[i][j].name, t.T[i][j].factory,
-                                      t.T[i][j].price, t.T[i][j].country, T2);
+                                      t.T[i][j].price, t.T[i][j].country, t.T[i][j].record_number, T2);
                 }
             }
         }
         // добавление нового элемента в расширенную таблицу
-        insertInHeshTable(code, name, factory, price, country, T2);
+        insertInHeshTable(code, name, factory, price, country, record_number, T2);
         // увеличивание и изменение исходной таблицы
         t.Resize(T2.L);
         swap(T2, t);
@@ -100,7 +99,7 @@ int insertInHeshTable(int code, string name, string factory, int price, string c
     if (i < t.L)
     {
         t.T[i][j].code = code; t.T[i][j].name = name; t.T[i][j].factory=factory;
-        t.T[i][j].price=price; t.T[i][j].country=country;
+        t.T[i][j].price=price; t.T[i][j].country=country; t.T[i][j].record_number = record_number;
         t.T[i][j].openORclose = false;
         t.insertedcount++;
         return 0;

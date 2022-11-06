@@ -15,7 +15,7 @@ int readAndInsertInHashTable(int number, string filename, HeshTable& t){
     if(errorCode == -1) return -1;
     // insertInHeshTable(int code, string name, string factory, int price, string country, HeshTable& t)
     errorCode = insertInHeshTable(record->code, record->name, record->factory,
-                                  record->price, record->country, t);
+                                  record->price, record->country, number, t);
     if(errorCode == -1) return -1;
     return 0;
 }
@@ -33,6 +33,16 @@ int deleteRecord(int key, string filename, HeshTable& t){
 //Найти запись в файле по значению ключа (найти ключ в хеш-таблице,
 //получить номер записи с этим ключом в файле, выполнить прямой доступ
 //к записи по ее номеру)..
+
+int FindByKey(int key, string fileName, HeshTable& t, product& result){
+    int errorCode;
+    int* coor;
+    coor = search(t, key);
+    int i=coor[0], j=coor[1];
+    int n = t.T[i][j].record_number;
+    errorCode = FindRecord(fileName, n, result);
+    return errorCode;
+}
 
 //???????????????
 #endif //INC_3_BIN_HASH_H
