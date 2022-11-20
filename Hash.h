@@ -6,10 +6,8 @@
 const int c = 1; //c – константа, определяющая шаг перебора, линейного пробирования
 
 #include <iostream>
-
 using namespace std;
 
-#include <list>
 
 // структура записи
 struct typeitem {
@@ -55,8 +53,7 @@ int hesh(int code, int L) {
 }
 
 //вставка с рехешированием
-int
-insertInHeshTable(int code, string name, string factory, int price, string country, int record_number, HeshTable &t) {
+int insertInHeshTable(int code, string name, string factory, int price, string country, int record_number, HeshTable &t) {
 
     // рехеширование
     if (float(t.insertedcount) / t.L >= 0.75) { // коэффициент нагрузки

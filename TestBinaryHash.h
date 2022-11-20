@@ -16,7 +16,7 @@ void testBinaryHash() {
     string fnameBin;
     string fnameText;
     string country;
-    product *record = new product();
+    product *record;
     int key;
     string line;
 

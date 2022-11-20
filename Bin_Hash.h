@@ -21,8 +21,7 @@ int readAndInsertInHashTable(int number, string filename, HeshTable &t) {
     return 0;
 }
 
-// Удалить запись из таблицы при заданном значении ключа и
-//соответственно из файла
+// Удалить запись из таблицы при заданном значении ключа и соответственно из файла
 int deleteRecord(int key, string filename, HeshTable &t) {
     int errorCode;
     errorCode = DelByKey(filename, key);
@@ -45,5 +44,4 @@ int FindByKey(int key, string fileName, HeshTable &t, product &result) {
     return errorCode;
 }
 
-//???????????????
 #endif //INC_3_BIN_HASH_H
