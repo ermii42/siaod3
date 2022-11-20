@@ -103,44 +103,43 @@ int insertInHeshTable(int code, string name, string factory, int price, string c
 
 // вывод хеш-таблицы
 void outTable(HeshTable& t) {
+    typeitem *nxt;
     for (int i = 0; i < t.L; i++) {
-        for (int j = 0; j < size2; j++) {
-            if(t.T[i][j].openORclose == 1 && j>0) break;
-            cout << i << '\t' << t.T[i][j].code << "\t" << t.T[i][j].name << "\t" << t.T[i][j].factory<<"\t"
-            << t.T[i][j].price << "\t" << t.T[i][j].country << "\t" << t.T[i][j].openORclose << "  "
-            << t.T[i][j].deletedORnot << '\n';
+        nxt = &(t.T[i]);
+        while(nxt!= nullptr) {
+            cout << i << '\t' << nxt->code << "\t" << nxt->name << "\t" << nxt->factory<<"\t"
+            << nxt->price << "\t" << nxt->country << "\t" << nxt->openORclose << "  "
+            << nxt->deletedORnot << '\n';
+            nxt = nxt->next;
         }
     }
 }
 
 // поиск
-int* search(HeshTable& t, int code) {
+int search(HeshTable& t, int code) {
     int i = hesh(code, t.L);
     //ищем по кластеру
-    int j=0;
-    int* result = new int[2];
-    result[0]=-1;
-    result[1]=-1;
+    int result;
+    typeitem *nxt;
+    nxt = &(t.T[i]);
 
-    while (j < size2 && ((t.T[i][j].openORclose == false && t.T[i][j].deletedORnot==false)
-                       || (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == true))
-           && t.T[i][j].code != code)
-        j++;
-    if (not (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == false)) {
-        result[0] = i;
-        result[1] = j;
+    while (nxt!= nullptr && ((nxt->openORclose == false && nxt->deletedORnot==false)
+                       || (nxt->openORclose == true && nxt->deletedORnot == true))
+           && nxt->code != code)
+        nxt =nxt->next;
+    if (not (nxt->openORclose == true && nxt->deletedORnot == false)) {
+        result = i;
     }
     return result;
 }
 
 //удаление
 int deletedFromHeshTable(HeshTable& t, int code) {
-    int* coor;
-    coor = search(t, code);
-    int i = coor[0], j = coor[1];
+    int i;
+    i = search(t, code);
     if (i == -1) return 1;//нет такой записи в таблице
-    t.T[i][j].deletedORnot = true;
-    t.T[i][j].openORclose = true;
+    t.T[i].deletedORnot = true;
+    t.T[i].openORclose = true;
     t.deletedcount++;
     return 0;
 }

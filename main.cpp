@@ -5,7 +5,7 @@
 int main()
 {
     testHash();
-    testBinary();
-    testBinaryHash();
+    //testBinary();
+    //testBinaryHash();
 }
 

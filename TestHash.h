@@ -18,11 +18,10 @@ void testHash(){
     cout<< endl;
     typeitem r;
 
-    int* coor = search(T, 9);
-    int i=coor[0], j=coor[1];
+    int i = search(T, 9);
 
-    if (i!=-1 && j!= -1){
-        r = T.T[i][j];
+    if (i!=-1){
+        r = T.T[i];
         cout << r.code << ' ' << r.name << endl;
     }
     else
@@ -35,10 +34,9 @@ void testHash(){
         cout << "record is not\n" << '\n';
     cout<<"Table:\n";
     outTable(T);
-    coor = search(T, 28);
-    i=coor[0], j=coor[1];
+    i = search(T, 28);
     if (i != -1) {
-        r = T.T[i][j];
+        r = T.T[i];
         cout << r.code << ' ' << r.name << endl;
     }
     else
