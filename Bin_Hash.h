@@ -37,8 +37,10 @@ int deleteRecord(int key, string filename, HeshTable &t) {
 
 int FindByKey(int key, string fileName, HeshTable &t, product &result) {
     int errorCode;
-    int i = search(t, key);
-    int n = t.T[i].record_number;
+    typeitem* r;
+    errorCode = search(t, key, r);
+    if(errorCode==-1) return -1;
+    int n = r->record_number;
     errorCode = FindRecord(fileName, n, result);
     return errorCode;
 }

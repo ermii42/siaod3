@@ -18,27 +18,31 @@ void testHash() {
     cout << "Table:\n";
     outTable(T);
     cout << endl;
-    typeitem r;
+    typeitem* r;
 
-    int i = search(T, 9);
+    int i = search(T, 9, r);
 
     if (i != -1) {
-        r = T.T[i];
-        cout << r.code << ' ' << r.name << endl;
+        cout << r->code << ' ' << r->name << endl;
     } else
         cout << "record is not" << '\n';
 
 
-    i = deletedFromHeshTable(T, 9);
+    i = deletedFromHeshTable(T, 28);
     if (i == 0)cout << "record is deleted\n";
     else
         cout << "record is not\n" << '\n';
     cout << "Table:\n";
     outTable(T);
-    i = search(T, 28);
+
+    i = search(T, 9, r);
     if (i != -1) {
-        r = T.T[i];
-        cout << r.code << ' ' << r.name << endl;
+        cout << r->code << ' ' << r->name << endl;
+    } else
+        cout << "record is not" << '\n';
+    i = search(T, 28, r);
+    if (i != -1) {
+        cout << r->code << ' ' << r->name << endl;
     } else
         cout << "record is not" << '\n';
 

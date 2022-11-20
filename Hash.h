@@ -96,6 +96,7 @@ insertInHeshTable(int code, string name, string factory, int price, string count
         nxt->price = price;
         nxt->record_number = record_number;
         nxt->openORclose = false;
+        t.insertedcount++;
         return 0;
     }
     while (nxt->next != nullptr)
@@ -132,10 +133,10 @@ void outTable(HeshTable &t) {
 }
 
 // поиск
-int search(HeshTable &t, int code) {
+int search(HeshTable &t, int code, typeitem* &res) {
     int i = hesh(code, t.L);
     //ищем по кластеру
-    int result;
+    int result=-1;
     typeitem *nxt;
     nxt = &(t.T[i]);
 
@@ -143,8 +144,10 @@ int search(HeshTable &t, int code) {
                               || (nxt->openORclose == true && nxt->deletedORnot == true))
            && nxt->code != code)
         nxt = nxt->next;
-    if (not(nxt->openORclose == true && nxt->deletedORnot == false)) {
+    if(nxt== nullptr) return -1;
+    if (nxt->openORclose == false && nxt->deletedORnot == false) {
         result = i;
+        res = nxt;
     }
     return result;
 }
@@ -152,10 +155,11 @@ int search(HeshTable &t, int code) {
 //удаление
 int deletedFromHeshTable(HeshTable &t, int code) {
     int i;
-    i = search(t, code);
-    if (i == -1) return 1;//нет такой записи в таблице
-    t.T[i].deletedORnot = true;
-    t.T[i].openORclose = true;
+    typeitem* nxt;
+    i = search(t, code, nxt);
+    if (i == -1) return -1;//нет такой записи в таблице
+    nxt->deletedORnot = true;
+    nxt->openORclose = true;
     t.deletedcount++;
     return 0;
 }
