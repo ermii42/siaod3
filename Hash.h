@@ -4,21 +4,22 @@
 #define INC_3_HASH_H
 
 const int c = 1; //c – константа, определяющая шаг перебора, линейного пробирования
-const int size2 = 5;
 
 #include <iostream>
 using namespace std;
+#include <list>
 
 // структура записи
 struct typeitem {
-    int code=0;      // ключ записи - артикул, шестиразрядное число
-    string name="-"; // название
-    string factory="-"; // завод изготовитель
-    int price = 0; // цена
-    string country = "-"; // страна (название)
-    int record_number; // порядковый номер записи
+    int code=0;                 // ключ записи - артикул, шестиразрядное число
+    string name="-";            // название
+    string factory="-";         // завод изготовитель
+    int price = 0;              // цена
+    string country = "-";       // страна (название)
+    int record_number;          // порядковый номер записи
 
-    bool openORclose=true;     //свободна ли ячейка
+    typeitem *next = nullptr;
+    bool openORclose=true;      //свободна ли ячейка
     bool deletedORnot=false;    //не удалялась ли ячейка
 
 };
@@ -26,34 +27,20 @@ struct typeitem {
 // структура хеш-таблицы
 struct HeshTable {
     int L = 19;
-    typeitem **T;// таблица, динимачиский массив из объектов по постановке задачи
+    typeitem *T;// таблица, динимачиский массив из объектов по постановке задачи
     int insertedcount;//количество вставленных ключей
     int deletedcount; //количество удаленных ключей
     void createHeshTable() {
-        T = new typeitem*[L];
-        for (int i=0; i<L; i++){
-            T[i] = new typeitem[size2];
-        }
+        T = new typeitem[L];
         insertedcount = 0;
         deletedcount=0;
     }
     void Resize(int newL){  //увеличение размера таблицы
-        for (int i=0; i<L; i++){
-            delete[] T[i];
-        }
         delete[] T;
-
         L = newL;
-
-        T = new typeitem*[L];
-        for (int i=0; i<L; i++){
-            T[i] = new typeitem[size2];
-        }
+        T = new typeitem[L];
     }
     void Delete(){
-        for (int i=0; i<L; i++){
-            delete[] T[i];
-        }
         delete[] T;
     }
 };
@@ -71,15 +58,17 @@ int insertInHeshTable(int code, string name, string factory, int price, string c
         HeshTable T2;   // создание новой таблицы и увеличивание ее размера в сравнении с предыдущей вдвое
         T2.createHeshTable();
         T2.Resize(t.L*2);
-
+        typeitem *nxt;
         // заполнение новой таблицы старыми значениями с учетом нового значения размера (рехеширую)
         for(int i=0; i<t.L; i++){
-            for(int j=0; j<size2; j++){
+            nxt = &(t.T[i]);
+            while(nxt != nullptr){
                 // добавляю только непустые неудаленные элементы
-                if(t.T[i][j].openORclose == false && t.T[i][j].deletedORnot==false){
-                    insertInHeshTable(t.T[i][j].code, t.T[i][j].name, t.T[i][j].factory,
-                                      t.T[i][j].price, t.T[i][j].country, t.T[i][j].record_number, T2);
+                if(nxt->openORclose == false && nxt->deletedORnot==false){
+                    insertInHeshTable(nxt->code, nxt->name, nxt->factory,
+                                      nxt->price, nxt->country, nxt->record_number, T2);
                 }
+                nxt = nxt->next;
             }
         }
         // добавление нового элемента в расширенную таблицу
@@ -93,14 +82,18 @@ int insertInHeshTable(int code, string name, string factory, int price, string c
 
     int i = hesh(code, t.L);
     int j=0;
+    typeitem *nxt = &(t.T[i]);
     //разрешение коллизии
-    while (j<size2 && t.T[i][j].openORclose == false)
-        j += c;
+    while (nxt->next != nullptr)
+        nxt = nxt->next;
     if (i < t.L)
     {
-        t.T[i][j].code = code; t.T[i][j].name = name; t.T[i][j].factory=factory;
-        t.T[i][j].price=price; t.T[i][j].country=country; t.T[i][j].record_number = record_number;
-        t.T[i][j].openORclose = false;
+        typeitem* newElem = new typeitem();
+
+        newElem->code = code; newElem->name = name; newElem->factory=factory;
+        newElem->price=price; newElem->country=country; newElem->record_number = record_number;
+        newElem->openORclose = false;
+        nxt->next=newElem;
         t.insertedcount++;
         return 0;
     }
@@ -114,8 +107,8 @@ void outTable(HeshTable& t) {
         for (int j = 0; j < size2; j++) {
             if(t.T[i][j].openORclose == 1 && j>0) break;
             cout << i << '\t' << t.T[i][j].code << "\t" << t.T[i][j].name << "\t" << t.T[i][j].factory<<"\t"
-                 << t.T[i][j].price << "\t" << t.T[i][j].country << "\t" << t.T[i][j].openORclose << "  "
-                 << t.T[i][j].deletedORnot << '\n';
+            << t.T[i][j].price << "\t" << t.T[i][j].country << "\t" << t.T[i][j].openORclose << "  "
+            << t.T[i][j].deletedORnot << '\n';
         }
     }
 }
@@ -130,7 +123,7 @@ int* search(HeshTable& t, int code) {
     result[1]=-1;
 
     while (j < size2 && ((t.T[i][j].openORclose == false && t.T[i][j].deletedORnot==false)
-                         || (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == true))
+                       || (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == true))
            && t.T[i][j].code != code)
         j++;
     if (not (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == false)) {
