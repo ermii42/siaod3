@@ -18,9 +18,9 @@ struct typeitem {
     string country = "-";       // страна (название)
     int record_number;          // порядковый номер записи
 
-    typeitem *next = nullptr;
-    bool openORclose=true;      //свободна ли ячейка
-    bool deletedORnot=false;    //не удалялась ли ячейка
+    typeitem *next = nullptr;   // указатель на следующую запись с таким же ключом
+    bool openORclose=true;      // свободна ли ячейка
+    bool deletedORnot=false;    // не удалялась ли ячейка
 
 };
 
@@ -81,9 +81,14 @@ int insertInHeshTable(int code, string name, string factory, int price, string c
     }
 
     int i = hesh(code, t.L);
-    int j=0;
     typeitem *nxt = &(t.T[i]);
     //разрешение коллизии
+    if(nxt->next == nullptr && nxt->openORclose == true){
+        nxt->code=code; nxt->name=name; nxt->country=country;
+        nxt->factory=factory; nxt->price=price; nxt->record_number=record_number;
+        nxt->openORclose=false;
+        return 0;
+    }
     while (nxt->next != nullptr)
         nxt = nxt->next;
     if (i < t.L)

@@ -2,8 +2,7 @@
 #include "TestBinary.h"
 #include "TestBinaryHash.h"
 
-int main()
-{
+int main() {
     testHash();
     //testBinary();
     //testBinaryHash();

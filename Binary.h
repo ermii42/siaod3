@@ -1,13 +1,15 @@
 
 #ifndef INC_3_BINARY_H
 #define INC_3_BINARY_H
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <ctime>
+
 using namespace std;
 
-struct product{
+struct product {
     int code;
     char name[20];
     char factory[20];
@@ -19,18 +21,17 @@ int stringBinToText(string fileName, string newfileName) /** из текстов
 {
     ifstream ft(fileName);
     ofstream fb(newfileName, ios::binary | ios::out);
-    if(!ft) return -1;
-    if(!fb) return -1;
+    if (!ft) return -1;
+    if (!fb) return -1;
     product x;
-    while (!ft.eof())
-    {
-        ft >> x.name;	//заполнение Х
+    while (!ft.eof()) {
+        ft >> x.name;    //заполнение Х
         ft >> x.code;
         ft >> x.factory;
         ft >> x.price;
         ft >> x.country;
 
-        fb.write((char *)&x, sizeof(product));
+        fb.write((char *) &x, sizeof(product));
     }
     ft.close();
     fb.close();
@@ -41,18 +42,17 @@ int stringTextToBin(string fileName, string newfileName) // из двоично�
 {
     ifstream input(fileName, std::ios::binary | std::ios::in);
     ofstream output(newfileName);
-    if(!input) return -1;
-    if(!output) return -1;
+    if (!input) return -1;
+    if (!output) return -1;
     product x;
 
     //чтение из файла всей записи
-    input.read((char *)&x, sizeof(product));
-    output << x.name <<' '<<x.code<<' '<<x.factory<<' '<<x.price<<' '<<x.country;
-    while (!input.eof())
-    {
+    input.read((char *) &x, sizeof(product));
+    output << x.name << ' ' << x.code << ' ' << x.factory << ' ' << x.price << ' ' << x.country;
+    while (!input.eof()) {
         output << endl;
-        input.read((char *)&x, sizeof(product));
-        output << x.name <<' '<<x.code<<' '<<x.factory<<' '<<x.price<<' '<<x.country;
+        input.read((char *) &x, sizeof(product));
+        output << x.name << ' ' << x.code << ' ' << x.factory << ' ' << x.price << ' ' << x.country;
     }
     input.close();
     output.close();
@@ -60,35 +60,33 @@ int stringTextToBin(string fileName, string newfileName) // из двоично�
 }
 
 //вывод записей двоичного файла
-int out_bin_file(string filename)
-{
+int out_bin_file(string filename) {
     fstream fb(filename, ios::out | ios::in | ios::binary);
-    if(!fb) return -1;
+    if (!fb) return -1;
 
     product x;
     //чтение из файла всей записи
-    fb.read((char *)&x, sizeof(product));
-    while (!fb.eof())
-    {
-        cout << x.name<<'\t';
-        cout << x.code<<'\t';
-        cout << x.factory<<'\t';
-        cout << x.price<<'\t';
+    fb.read((char *) &x, sizeof(product));
+    while (!fb.eof()) {
+        cout << x.name << '\t';
+        cout << x.code << '\t';
+        cout << x.factory << '\t';
+        cout << x.price << '\t';
         cout << x.country;
-        fb.read((char *)&x, sizeof(product));
-        cout<<endl;
+        fb.read((char *) &x, sizeof(product));
+        cout << endl;
     }
     fb.close();
     return 0;
 }
 
-int FindRecord(string filename, int n, product& x){
+int FindRecord(string filename, int n, product &x) {
     //product x;
     ifstream file(filename, ios::out | ios::in | ios::binary);
-    if(!file) return -1;
-    file.seekg(sizeof(product)*(n-1), ios::beg);
-    if(file.bad()) return -1;
-    file.read((char *)&x, sizeof(product));
+    if (!file) return -1;
+    file.seekg(sizeof(product) * (n - 1), ios::beg);
+    if (file.bad()) return -1;
+    file.read((char *) &x, sizeof(product));
     file.close();
     return 0;
 }
@@ -98,70 +96,71 @@ int CreateNewFileFrom(string filename, string newfilename, string country) {
     fstream file(filename, ios::out | ios::in | ios::binary);
     ofstream newfile(newfilename);
 
-    if(!file) return -1;
-    if(!newfile) return -1;
+    if (!file) return -1;
+    if (!newfile) return -1;
 
     product x;
     newfile << country;
-    file.read((char *)&x, sizeof(product));
-    while(!file.eof()){
-        if(x.country == country){
-            newfile<<endl;
-            newfile<<x.name <<' '<<x.code<<' '<<x.factory<<' '<<x.price;
+    file.read((char *) &x, sizeof(product));
+    while (!file.eof()) {
+        if (x.country == country) {
+            newfile << endl;
+            newfile << x.name << ' ' << x.code << ' ' << x.factory << ' ' << x.price;
         }
-        file.read((char *)&x, sizeof(product));
+        file.read((char *) &x, sizeof(product));
     }
     file.close();
     newfile.close();
     return 0;
 }
 
-int LastRecordIndex(string filename){
+int LastRecordIndex(string filename) {
     fstream file(filename, ios::out | ios::in | ios::binary);
-    if(!file) return -1;
+    if (!file) return -1;
     product x;
-    int k=0;
-    while(!file.eof()){
-        file.read((char *)&x, sizeof(product));
+    int k = 0;
+    while (!file.eof()) {
+        file.read((char *) &x, sizeof(product));
         k++;
     }
     file.close();
     return k;
 }
 
-int DelByKey(string filename, int key){
+int DelByKey(string filename, int key) {
     fstream file(filename, ios::out | ios::in | ios::binary);
-    if(!file) return -1;
+    if (!file) return -1;
     product x;
-    int index=2;
-    while(!file.eof()){
-        file.read((char *)&x, sizeof(product));
-        if(x.code==key){
+    int index = 2;
+    while (!file.eof()) {
+        file.read((char *) &x, sizeof(product));
+        if (x.code == key) {
             break;
         }
         index++;
     }
-    int num=(LastRecordIndex(filename)-2);
-    file.seekg(sizeof(product)*num, ios::beg);
-    if(file.bad()) return -1;
-    file.read((char *)&x, sizeof(product));
-    file.seekp(sizeof(product)*(index-2), ios::beg);
-    if(file.bad()) return -1;
-    file.write((char *)&x, sizeof(product));
+    int num = (LastRecordIndex(filename) - 2);
+    file.seekg(sizeof(product) * num, ios::beg);
+    if (file.bad()) return -1;
+    file.read((char *) &x, sizeof(product));
+    file.seekp(sizeof(product) * (index - 2), ios::beg);
+    if (file.bad()) return -1;
+    file.write((char *) &x, sizeof(product));
     file.close();
     return 0;
 }
 
-int AddToEndFile(string filename){
-    fstream file(filename, ios::out | ios::in | ios::binary|ios::ate);
+int AddToEndFile(string filename) {
+    fstream file(filename, ios::out | ios::in | ios::binary | ios::ate);
     //string line;
-    if(!file) return -1;
+    if (!file) return -1;
     product x;
 
-    cin >> x.name>>x.code>>x.factory>>x.price>>x.country;
+    cin >> x.name >> x.code >> x.factory >> x.price >> x.country;
     //cout<<x.name<< x.code<<x.factory<<x.price<<x.country<<endl;
-    file.write((char *)&x, sizeof(product));
+    file.write((char *) &x, sizeof(product));
     file.close();
     return 0;
 }
+
 #endif //INC_3_BINARY_H
