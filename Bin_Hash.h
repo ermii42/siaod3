@@ -9,13 +9,13 @@
 
 // Прочитать запись из файла и вставить элемент в таблицу
 int readAndInsertInHashTable(int number, string filename, HeshTable& t){
-    product* record = new product();
+    product record;
     int errorCode;
-    errorCode=FindRecord(filename, number, *record);
+    errorCode=FindRecord(filename, number, record);
     if(errorCode == -1) return -1;
     // insertInHeshTable(int code, string name, string factory, int price, string country, HeshTable& t)
-    errorCode = insertInHeshTable(record->code, record->name, record->factory,
-                                  record->price, record->country, number, t);
+    errorCode = insertInHeshTable(record.code, record.name, record.factory,
+                                  record.price, record.country, number, t);
     if(errorCode == -1) return -1;
     return 0;
 }

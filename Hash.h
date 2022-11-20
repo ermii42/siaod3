@@ -114,8 +114,8 @@ void outTable(HeshTable& t) {
         for (int j = 0; j < size2; j++) {
             if(t.T[i][j].openORclose == 1 && j>0) break;
             cout << i << '\t' << t.T[i][j].code << "\t" << t.T[i][j].name << "\t" << t.T[i][j].factory<<"\t"
-            << t.T[i][j].price << "\t" << t.T[i][j].country << "\t" << t.T[i][j].openORclose << "  "
-            << t.T[i][j].deletedORnot << '\n';
+                 << t.T[i][j].price << "\t" << t.T[i][j].country << "\t" << t.T[i][j].openORclose << "  "
+                 << t.T[i][j].deletedORnot << '\n';
         }
     }
 }
@@ -130,7 +130,7 @@ int* search(HeshTable& t, int code) {
     result[1]=-1;
 
     while (j < size2 && ((t.T[i][j].openORclose == false && t.T[i][j].deletedORnot==false)
-                       || (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == true))
+                         || (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == true))
            && t.T[i][j].code != code)
         j++;
     if (not (t.T[i][j].openORclose == true && t.T[i][j].deletedORnot == false)) {
